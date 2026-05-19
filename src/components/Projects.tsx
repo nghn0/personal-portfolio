@@ -164,6 +164,16 @@ export default function Projects() {
                       <ExternalLink size={20} /> View Case Study
                     </Link>
                   )}
+                  {selectedProject.liveUrl && (
+                    <a 
+                      href={selectedProject.liveUrl}
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl bg-neon-purple/10 hover:bg-neon-purple/20 border border-neon-purple/50 transition-colors text-white font-medium shadow-[0_0_15px_rgba(122,0,255,0.1)] hover:shadow-[0_0_15px_rgba(122,0,255,0.3)]"
+                    >
+                      <ExternalLink size={20} /> Live Site
+                    </a>
+                  )}
                 </div>
               </div>
             </motion.div>

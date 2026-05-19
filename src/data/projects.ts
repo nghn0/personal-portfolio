@@ -9,9 +9,28 @@ export type Project = {
   github: string;
   color: "neon-cyan" | "neon-purple" | "accent-pink";
   pageUrl?: string;
+  liveUrl?: string;
 };
 
 export const allProjects: Project[] = [
+  {
+    id: "digital-contract-platform",
+    title: "Digital Contract Platform",
+    type: "Full-Stack + AI + Web3",
+    shortDesc: "Distributed microservices platform for secure contract management, AI risk analysis, and blockchain verification.",
+    description: "A comprehensive digital contract platform featuring a Next.js frontend, an Express.js orchestrator, a Python gRPC AI service for legal risk analysis, and smart contract integration for cryptographic verification on the blockchain.",
+    features: [
+      "AI-powered legal document risk analysis",
+      "Blockchain-based cryptographic verification",
+      "High-performance Python gRPC microservice",
+      "Supabase integrated secure file management"
+    ],
+    tech: ["Next.js", "Express.js", "Python", "gRPC", "Ethers.js", "Supabase"],
+    github: "https://github.com/nghn0/digital-contract-platform",
+    color: "neon-cyan",
+    pageUrl: "/projects/digital-contract-platform",
+    liveUrl: "https://digital-contract-platform.vercel.app/"
+  },
   {
     id: "loomera",
     title: "Loomera",
