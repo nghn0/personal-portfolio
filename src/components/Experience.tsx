@@ -175,11 +175,11 @@ export default function Experience() {
               >
                 <div className="bg-[#0d0d12] p-2 rounded-[25px] shadow-[0_10px_30px_rgba(0,0,0,0.6)] border border-white/10">
                   <Pin className="w-8 h-8 text-[#b9c3d4] z-20 mb-5 mx-auto" />
-                  <div className="bg-[#101014] border border-white/10 rounded-[15px] p-5 flex flex-col relative overflow-hidden">
+                  <div className="bg-[#101014] border border-white/10 rounded-[15px] p-5 flex flex-col relative overflow-hidden font-mono">
                     {/* Hairline accent */}
                     <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-                    <h3 className="text-xl font-bold font-heading text-white leading-tight mb-3">
+                    <h3 className="text-xl font-bold text-white leading-tight mb-3">
                       {exp.role}
                     </h3>
 

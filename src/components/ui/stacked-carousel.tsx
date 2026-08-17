@@ -384,7 +384,7 @@ function ProjectCard({
       {active && <LiquidMetalFrame radius={13.5} thickness={1.5} speed={0.5} />}
       <div
         className={cn(
-          "relative flex min-h-[430px] flex-col overflow-hidden rounded-xl bg-[#0d0d12] p-8 text-left transition-shadow duration-300",
+          "relative flex min-h-[430px] flex-col overflow-hidden rounded-xl bg-[#0d0d12] p-8 text-left font-mono transition-shadow duration-300",
           active
             ? "shadow-[0_24px_60px_rgba(0,0,0,0.6)]"
             : "shadow-[0_20px_60px_rgba(0,0,0,0.45)]"
@@ -393,7 +393,7 @@ function ProjectCard({
       {/* Hairline accent */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
-      <h3 className="font-heading text-2xl font-bold tracking-tight text-white sm:text-[26px]">
+      <h3 className="text-2xl font-bold tracking-tight text-white sm:text-[26px]">
         {project.title}
       </h3>
 

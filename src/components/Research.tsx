@@ -80,7 +80,7 @@ export default function Research() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-[#13131a]/60 backdrop-blur-xl border border-white/5 rounded-2xl transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_20px_rgba(185,195,212,0.15)] hover:-translate-y-1 p-8 group relative overflow-hidden cursor-pointer hover:bg-white/5"
+                className="bg-[#13131a]/60 backdrop-blur-xl border border-white/5 rounded-2xl transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_20px_rgba(185,195,212,0.15)] hover:-translate-y-1 p-8 group relative overflow-hidden cursor-pointer hover:bg-white/5 font-mono"
               >
                 {/* Hairline accent */}
                 <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
@@ -89,8 +89,8 @@ export default function Research() {
                   <Icon size={24} />
                 </div>
 
-                <span className="text-xs font-accent tracking-widest text-gray-400 uppercase block mb-3">{item.type}</span>
-                <h3 className="text-xl font-bold font-heading text-white mb-4 group-hover:text-gray-200 transition-colors">{item.title}</h3>
+                <span className="text-xs tracking-widest text-gray-400 uppercase block mb-3">{item.type}</span>
+                <h3 className="text-xl font-bold text-white mb-4 group-hover:text-gray-200 transition-colors">{item.title}</h3>
 
                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                   {item.shortDesc}
