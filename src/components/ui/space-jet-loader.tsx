@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import {
+  motion,
+  type TargetAndTransition,
+  type Transition,
+} from "framer-motion";
 import { useProgress } from "@react-three/drei";
 
 const ACCENT = "#b9c3d4";
@@ -81,8 +85,8 @@ export default function SpaceJetLoader() {
 
   const render = !gone;
 
-  let jetAnimate: Record<string, unknown>;
-  let jetTransition: Record<string, unknown>;
+  let jetAnimate: TargetAndTransition;
+  let jetTransition: Transition;
 
   if (effPhase === "entering") {
     // 1. Fly in from the left, arriving at the top of the orbit circle.
