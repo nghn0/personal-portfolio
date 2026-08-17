@@ -13,6 +13,26 @@ const ACCENT = "#b9c3d4";
 // Orbit radius (px) — large enough that the jet never clips the status text.
 const ORBIT = 160;
 
+// Sample the orbit circle at 24 points (plus the closing point) so the path
+// reads as a true circle, not a polygon/diamond.
+const CIRCLE_STEPS = 24;
+
+// Keyframes that trace a full circle in the clockwise direction. `rotate` is
+// set to the tangent angle at each point so the jet always points along the
+// direction of travel. The last keyframe equals the first for a seamless loop.
+const orbitKeyframes = (() => {
+  const x: number[] = [];
+  const y: number[] = [];
+  const rotate: number[] = [];
+  for (let i = 0; i <= CIRCLE_STEPS; i++) {
+    const theta = (i / CIRCLE_STEPS) * Math.PI * 2;
+    x.push(ORBIT * Math.sin(theta));
+    y.push(-ORBIT * Math.cos(theta));
+    rotate.push((theta * 180) / Math.PI);
+  }
+  return { x, y, rotate };
+})();
+
 function JetSVG() {
   return (
     <svg
@@ -84,17 +104,11 @@ export default function SpaceJetLoader() {
     jetTransition = { duration: 1.2, ease: "easeInOut" };
   } else if (effPhase === "orbiting") {
     // 2. Circle around the center status text until the load finishes.
-    jetAnimate = {
-      x: [0, ORBIT, 0, -ORBIT, 0],
-      y: [-ORBIT, 0, ORBIT, 0, -ORBIT],
-    };
-    jetTransition = {
-      x: { duration: 6, ease: "linear", repeat: Infinity },
-      y: { duration: 6, ease: "linear", repeat: Infinity },
-    };
+    jetAnimate = orbitKeyframes;
+    jetTransition = { duration: 8, ease: "linear", repeat: Infinity };
   } else {
-    // 3. Fly out to the right once loading is done.
-    jetAnimate = { x: "70vw", y: 0 };
+    // 3. Fly out to the right once loading is done, straightening out as it leaves.
+    jetAnimate = { x: "70vw", y: 0, rotate: 0 };
     jetTransition = { duration: 0.85, ease: "easeIn" };
   }
 
