@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   motion,
   type TargetAndTransition,
@@ -52,38 +52,28 @@ type Phase = "entering" | "orbiting" | "exiting";
 
 export default function SpaceJetLoader() {
   const { active, progress } = useProgress();
-  const [minElapsed, setMinElapsed] = useState(false);
   const [phase, setPhase] = useState<Phase>("entering");
+  const [orbitMinElapsed, setOrbitMinElapsed] = useState(false);
+  const [hardCap, setHardCap] = useState(false);
   const [gone, setGone] = useState(false);
-  const startedAt = useRef<number | null>(null);
 
-  // Show for a minimum of 700ms so the loader never flashes on fast loads.
+  // Guarantee a minimum orbit time so the circling motion is always visible
+  // before the exit flight.
   useEffect(() => {
-    if (active) {
-      if (startedAt.current === null) startedAt.current = Date.now();
-      return;
-    }
-    const elapsed =
-      startedAt.current === null ? 0 : Date.now() - startedAt.current;
-    const wait = Math.max(0, 700 - elapsed);
-    const t = setTimeout(() => setMinElapsed(true), wait);
-    startedAt.current = null;
+    if (phase !== "orbiting") return;
+    const t = setTimeout(() => setOrbitMinElapsed(true), 2500);
     return () => clearTimeout(t);
-  }, [active]);
+  }, [phase]);
 
   // Safety net: never trap the visitor on the loader if an asset hangs.
   useEffect(() => {
-    if (!active) return;
-    const t = setTimeout(() => setMinElapsed(true), 12000);
+    const t = setTimeout(() => setHardCap(true), 12000);
     return () => clearTimeout(t);
-  }, [active]);
+  }, []);
 
-  const done = !active && minElapsed;
-
-  // Loading finished → immediately shift to the exit flight (derived, no setState).
+  const loaded = !active && progress >= 100;
+  const done = (loaded && orbitMinElapsed) || hardCap;
   const effPhase: Phase = done ? "exiting" : phase;
-
-  const render = !gone;
 
   let jetAnimate: TargetAndTransition;
   let jetTransition: Transition;
@@ -109,7 +99,7 @@ export default function SpaceJetLoader() {
   }
 
   return (
-    render && (
+    !gone && (
       <motion.div
         className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center overflow-hidden"
         initial={{ opacity: 0 }}
@@ -133,18 +123,9 @@ export default function SpaceJetLoader() {
         </motion.div>
 
         {/* Status text — the jet circles around this */}
-        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-3">
+        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
           <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/70">
             Initializing Projects
-          </span>
-          <div className="h-px w-44 overflow-hidden bg-white/15">
-            <div
-              className="h-px bg-[#b9c3d4] transition-[width] duration-300 ease-out"
-              style={{ width: `${Math.min(100, Math.round(progress))}%` }}
-            />
-          </div>
-          <span className="font-mono text-[10px] tracking-[0.25em] text-white/40">
-            {Math.round(progress)}%
           </span>
         </div>
       </motion.div>

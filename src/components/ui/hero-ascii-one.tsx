@@ -192,7 +192,7 @@ export default function Home() {
             playsInline
             preload="auto"
             poster="/nithiwithoutascii.jpg"
-            className="absolute inset-0 h-full w-full object-cover object-center mix-blend-screen opacity-80 grayscale"
+            className="absolute inset-0 h-full w-full object-cover object-center mix-blend-screen opacity-95 grayscale"
             style={cleanMaskStyle ?? { opacity: 0, visibility: "hidden" }}
           >
             <source src="/nithiwithoutascii.webm" type="video/webm" />
@@ -206,7 +206,7 @@ export default function Home() {
             playsInline
             preload="auto"
             poster="/nithwithout.jpg"
-            className="absolute inset-0 h-full w-full object-cover object-center mix-blend-screen opacity-75 grayscale"
+            className="absolute inset-0 h-full w-full object-cover object-center mix-blend-screen opacity-95 grayscale"
             style={asciiMaskStyle}
           >
             <source src="/nithwithout.webm" type="video/webm" />
