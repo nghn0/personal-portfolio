@@ -13,19 +13,19 @@ export default function AIResumeBuilderPage() {
   return (
     <main className="min-h-screen pt-32 pb-24 px-6 relative overflow-hidden bg-[#0a0a0f]">
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-accent-pink/20 rounded-full blur-[120px]"></div>
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="mb-12">
-          <Link href="/projects" className="inline-flex items-center gap-2 text-accent-pink hover:text-white transition-colors group">
+          <Link href="/projects" className="inline-flex items-center gap-2 text-[#b9c3d4] hover:text-white transition-colors group">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </Link>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="flex flex-wrap items-center gap-4 mb-6">
-            <span className="px-4 py-1.5 rounded-full glass border-accent-pink/30 text-accent-pink text-sm font-accent tracking-widest uppercase">
+            <span className="px-4 py-1.5 rounded-full glass border-white/10 text-[#b9c3d4] text-sm font-accent tracking-widest uppercase">
               Full-Stack + AI
             </span>
             <span className="px-4 py-1.5 rounded-full glass border-white/10 text-gray-300 text-sm font-accent tracking-widest uppercase">
@@ -34,7 +34,7 @@ export default function AIResumeBuilderPage() {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold font-heading mb-6 tracking-tight">
-            AI Resume <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-pink to-neon-purple">Builder</span>
+            AI Resume <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400">Builder</span>
           </h1>
           
           <p className="text-xl text-gray-400 font-body leading-relaxed mb-10">
@@ -42,7 +42,7 @@ export default function AIResumeBuilderPage() {
           </p>
 
           <div className="flex flex-wrap gap-4 mb-16">
-            <a href="https://github.com/nghn0/AI-Powered-Resume-Builder" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-pink/10 hover:bg-accent-pink/20 border border-accent-pink/50 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(255,0,200,0.3)]">
+            <a href="https://github.com/nghn0/AI-Powered-Resume-Builder" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/20 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(185,195,212,0.15)]">
               <GithubIcon size={20} /> View Repository
             </a>
           </div>
@@ -52,18 +52,18 @@ export default function AIResumeBuilderPage() {
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="glass-card p-8">
               <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2">
-                <Layers className="text-accent-pink" size={20} /> Core Features
+                <Layers className="text-[#b9c3d4]" size={20} /> Core Features
               </h3>
               <ul className="space-y-3 text-gray-300">
-                <li className="flex items-start gap-2"><span className="text-accent-pink mt-1">▹</span> User authentication (Sign up, Login) via JWT</li>
-                <li className="flex items-start gap-2"><span className="text-accent-pink mt-1">▹</span> AI-powered resume generation (Together API)</li>
-                <li className="flex items-start gap-2"><span className="text-accent-pink mt-1">▹</span> Save and manage dynamic templates</li>
-                <li className="flex items-start gap-2"><span className="text-accent-pink mt-1">▹</span> High-fidelity PDF export using Puppeteer</li>
+                <li className="flex items-start gap-2"><span className="text-[#b9c3d4] mt-1">▹</span> User authentication (Sign up, Login) via JWT</li>
+                <li className="flex items-start gap-2"><span className="text-[#b9c3d4] mt-1">▹</span> AI-powered resume generation (Together API)</li>
+                <li className="flex items-start gap-2"><span className="text-[#b9c3d4] mt-1">▹</span> Save and manage dynamic templates</li>
+                <li className="flex items-start gap-2"><span className="text-[#b9c3d4] mt-1">▹</span> High-fidelity PDF export using Puppeteer</li>
               </ul>
             </div>
             <div className="glass-card p-8">
               <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2">
-                <ShieldCheck className="text-neon-purple" size={20} /> Tech Stack
+                <ShieldCheck className="text-[#b9c3d4]" size={20} /> Tech Stack
               </h3>
               <div className="flex flex-wrap gap-2">
                 {["Node.js", "Express", "MongoDB", "Mongoose", "EJS", "Puppeteer", "Together API", "JWT"].map(t => (

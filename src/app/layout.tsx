@@ -41,7 +41,7 @@ export default function RootLayout({
         orbitron.variable
       )}
     >
-      <body className="min-h-screen bg-[#0a0a0f] text-gray-200 antialiased selection:bg-neon-cyan selection:text-black overflow-x-hidden">
+      <body className="min-h-screen bg-[#0a0a0f] text-gray-200 antialiased selection:bg-[#b9c3d4] selection:text-black overflow-x-hidden">
         <CursorGlow />
         <Navbar />
         {children}

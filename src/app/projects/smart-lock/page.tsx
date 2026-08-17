@@ -13,19 +13,19 @@ export default function SmartLockPage() {
   return (
     <main className="min-h-screen pt-32 pb-24 px-6 relative overflow-hidden bg-[#0a0a0f]">
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-neon-purple/20 rounded-full blur-[120px]"></div>
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="mb-12">
-          <Link href="/projects" className="inline-flex items-center gap-2 text-neon-purple hover:text-white transition-colors group">
+          <Link href="/projects" className="inline-flex items-center gap-2 text-[#b9c3d4] hover:text-white transition-colors group">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </Link>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="flex flex-wrap items-center gap-4 mb-6">
-            <span className="px-4 py-1.5 rounded-full glass border-neon-purple/30 text-neon-purple text-sm font-accent tracking-widest uppercase">
+            <span className="px-4 py-1.5 rounded-full glass border-white/10 text-[#b9c3d4] text-sm font-accent tracking-widest uppercase">
               Hardware + IoT
             </span>
             <span className="px-4 py-1.5 rounded-full glass border-white/10 text-gray-300 text-sm font-accent tracking-widest uppercase">
@@ -34,7 +34,7 @@ export default function SmartLockPage() {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold font-heading mb-6 tracking-tight">
-            Smart Lock <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-accent-pink">System</span>
+            Smart Lock <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400">System</span>
           </h1>
           
           <p className="text-xl text-gray-400 font-body leading-relaxed mb-10">
@@ -42,7 +42,7 @@ export default function SmartLockPage() {
           </p>
 
           <div className="flex flex-wrap gap-4 mb-16">
-            <a href="https://github.com/nghn0/RFID_smart_locking_system" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-neon-purple/10 hover:bg-neon-purple/20 border border-neon-purple/50 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(122,0,255,0.3)]">
+            <a href="https://github.com/nghn0/RFID_smart_locking_system" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/20 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(185,195,212,0.15)]">
               <GithubIcon size={20} /> View Repository
             </a>
           </div>
@@ -51,17 +51,17 @@ export default function SmartLockPage() {
         <div className="space-y-16">
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="glass-card p-8 bg-black/50">
-              <Lock className="text-neon-purple mb-4" size={32} />
+              <Lock className="text-[#b9c3d4] mb-4" size={32} />
               <h3 className="text-lg font-bold font-heading text-white mb-2">RFID Auth</h3>
               <p className="text-gray-400 text-sm">Secure entry via MFRC522 RFID module. Triggers a relay to open a solenoid lock.</p>
             </div>
             <div className="glass-card p-8 bg-black/50">
-              <Wifi className="text-accent-pink mb-4" size={32} />
+              <Wifi className="text-[#b9c3d4] mb-4" size={32} />
               <h3 className="text-lg font-bold font-heading text-white mb-2">NodeMCU WiFi</h3>
               <p className="text-gray-400 text-sm">ESP8266 handles HTTP GET requests to send the UID to the remote server automatically.</p>
             </div>
             <div className="glass-card p-8 bg-black/50">
-              <Database className="text-neon-cyan mb-4" size={32} />
+              <Database className="text-[#b9c3d4] mb-4" size={32} />
               <h3 className="text-lg font-bold font-heading text-white mb-2">PHP Backend Log</h3>
               <p className="text-gray-400 text-sm">A remote PHP & MySQL setup records the ID, username, and precise timestamp of entry.</p>
             </div>

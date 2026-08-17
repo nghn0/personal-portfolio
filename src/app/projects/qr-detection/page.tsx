@@ -14,8 +14,8 @@ export default function QRDetectionPage() {
     <main className="min-h-screen pt-32 pb-24 px-6 relative overflow-hidden bg-[#0a0a0f]">
       {/* Background Glow */}
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-neon-cyan/20 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-neon-purple/20 rounded-full blur-[150px]"></div>
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-white/5 rounded-full blur-[150px]"></div>
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">
@@ -25,7 +25,7 @@ export default function QRDetectionPage() {
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
-          <Link href="/#projects" className="inline-flex items-center gap-2 text-neon-cyan hover:text-white transition-colors group">
+          <Link href="/#projects" className="inline-flex items-center gap-2 text-[#b9c3d4] hover:text-white transition-colors group">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </Link>
         </motion.div>
@@ -36,7 +36,7 @@ export default function QRDetectionPage() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center gap-4 mb-6">
-            <span className="px-4 py-1.5 rounded-full glass border-neon-cyan/30 text-neon-cyan text-sm font-accent tracking-widest uppercase">
+            <span className="px-4 py-1.5 rounded-full glass border-white/10 text-[#b9c3d4] text-sm font-accent tracking-widest uppercase">
               Computer Vision
             </span>
             <span className="px-4 py-1.5 rounded-full glass border-white/10 text-gray-300 text-sm font-accent tracking-widest uppercase">
@@ -45,7 +45,7 @@ export default function QRDetectionPage() {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold font-heading mb-6 tracking-tight">
-            QR Code Detection <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple">Pipeline</span>
+            QR Code Detection <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400">Pipeline</span>
           </h1>
           
           <p className="text-xl text-gray-400 font-body leading-relaxed mb-10">
@@ -53,7 +53,7 @@ export default function QRDetectionPage() {
           </p>
 
           <div className="flex flex-wrap gap-4 mb-16">
-            <a href="https://github.com/nghn0" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/50 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+            <a href="https://github.com/nghn0" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/20 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(185,195,212,0.15)]">
               <GithubIcon size={20} /> View Repository
             </a>
           </div>
@@ -71,24 +71,24 @@ export default function QRDetectionPage() {
             className="glass-card p-8 md:p-10"
           >
             <h2 className="text-2xl font-bold font-heading text-white mb-6 flex items-center gap-3">
-              <Terminal className="text-neon-cyan" /> Project Workflow
+              <Terminal className="text-[#b9c3d4]" /> Project Workflow
             </h2>
             <ul className="space-y-4 text-gray-300">
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-sm font-bold text-neon-cyan mt-0.5">1</span>
+                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-sm font-bold text-[#b9c3d4] mt-0.5">1</span>
                 <div>Environment setup and dependency installation (Ultralytics, Label Studio).</div>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-sm font-bold text-neon-cyan mt-0.5">2</span>
+                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-sm font-bold text-[#b9c3d4] mt-0.5">2</span>
                 <div>Manual annotation of training images using Label Studio and exporting to YOLO TXT format.</div>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-sm font-bold text-neon-cyan mt-0.5">3</span>
-                <div>Execution of <code className="text-neon-purple bg-white/5 px-1.5 py-0.5 rounded">train.py</code> to automatically split the dataset (80/20), generate YAML configs, and train YOLOv8 for 50 epochs.</div>
+                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-sm font-bold text-[#b9c3d4] mt-0.5">3</span>
+                <div>Execution of <code className="text-[#b9c3d4] bg-white/5 px-1.5 py-0.5 rounded">train.py</code> to automatically split the dataset (80/20), generate YAML configs, and train YOLOv8 for 50 epochs.</div>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-sm font-bold text-neon-cyan mt-0.5">4</span>
-                <div>Execution of <code className="text-neon-purple bg-white/5 px-1.5 py-0.5 rounded">infer.py</code> to run predictions and output both annotated images and detailed JSON payload for downstream applications.</div>
+                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-sm font-bold text-[#b9c3d4] mt-0.5">4</span>
+                <div>Execution of <code className="text-[#b9c3d4] bg-white/5 px-1.5 py-0.5 rounded">infer.py</code> to run predictions and output both annotated images and detailed JSON payload for downstream applications.</div>
               </li>
             </ul>
           </motion.section>
@@ -102,7 +102,7 @@ export default function QRDetectionPage() {
             className="glass-card p-8 md:p-10"
           >
             <h2 className="text-2xl font-bold font-heading text-white mb-6 flex items-center gap-3">
-              <Box className="text-neon-purple" /> Directory Architecture
+              <Box className="text-[#b9c3d4]" /> Directory Architecture
             </h2>
             <div className="bg-black/50 p-6 rounded-xl overflow-x-auto border border-white/5">
               <pre className="text-gray-300 text-sm font-mono leading-relaxed">
@@ -136,11 +136,11 @@ export default function QRDetectionPage() {
           >
             <div className="glass-card p-8">
               <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2">
-                <FileJson className="text-accent-pink" size={20} /> Detection Output
+                <FileJson className="text-[#b9c3d4]" size={20} /> Detection Output
               </h3>
               <p className="text-sm text-gray-400 mb-4">JSON payload containing precise bounding box coordinates for each detected QR code.</p>
               <div className="bg-black/50 p-4 rounded-lg border border-white/5 overflow-x-auto">
-                <pre className="text-accent-pink/90 text-xs font-mono">
+                <pre className="text-[#b9c3d4]/90 text-xs font-mono">
 {`[
   {
     "image_id": "image_001",
@@ -155,11 +155,11 @@ export default function QRDetectionPage() {
 
             <div className="glass-card p-8">
               <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2">
-                <FileJson className="text-neon-cyan" size={20} /> Decoding Output
+                <FileJson className="text-[#b9c3d4]" size={20} /> Decoding Output
               </h3>
               <p className="text-sm text-gray-400 mb-4">Extended payload containing decoded QR string values and classification types.</p>
               <div className="bg-black/50 p-4 rounded-lg border border-white/5 overflow-x-auto">
-                <pre className="text-neon-cyan/90 text-xs font-mono">
+                <pre className="text-[#b9c3d4]/90 text-xs font-mono">
 {`[
   {
     "image_id": "image_001",

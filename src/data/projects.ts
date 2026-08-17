@@ -7,7 +7,6 @@ export type Project = {
   features: string[];
   tech: string[];
   github: string;
-  color: "neon-cyan" | "neon-purple" | "accent-pink";
   pageUrl?: string;
   liveUrl?: string;
 };
@@ -27,7 +26,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["Next.js", "Express.js", "Python", "gRPC", "Ethers.js", "Supabase"],
     github: "https://github.com/nghn0/digital-contract-platform",
-    color: "neon-cyan",
     pageUrl: "/projects/digital-contract-platform",
     liveUrl: "https://digital-contract-platform.vercel.app/"
   },
@@ -45,7 +43,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["MobileNetV2", "TensorFlow", "Flask", "Grad-CAM", "HTML/CSS"],
     github: "https://github.com/nghn0/AI-Based-Silk-Fabric-Type-Texture-Classification-E-Commerce-Website",
-    color: "neon-cyan",
     pageUrl: "/projects/loomera"
   },
   {
@@ -62,7 +59,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["Keras", "OpenCV", "TensorFlow", "CNN", "ViT"],
     github: "https://github.com/nghn0/Emojify",
-    color: "neon-purple",
     pageUrl: "/projects/emojify"
   },
   {
@@ -79,7 +75,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["Flask", "Together API", "Puppeteer", "MongoDB", "Node.js"],
     github: "https://github.com/nghn0/AI-Powered-Resume-Builder",
-    color: "accent-pink",
     pageUrl: "/projects/ai-resume-builder"
   },
   {
@@ -96,7 +91,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["Python", "Transformers", "STT", "TTS"],
     github: "https://github.com/nghn0/Sentient-NPC",
-    color: "neon-cyan",
     pageUrl: "/projects/sentient-npc"
   },
   {
@@ -113,7 +107,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["Python", "YOLOv8", "Ultralytics", "Label Studio"],
     github: "https://github.com/nghn0/qr_code_detection",
-    color: "neon-cyan",
     pageUrl: "/projects/qr-detection"
   },
   {
@@ -130,7 +123,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["NodeMCU ESP8266", "RFID MFRC522", "PHP", "MySQL", "C++ (Arduino)"],
     github: "https://github.com/nghn0/RFID_smart_locking_system",
-    color: "neon-purple",
     pageUrl: "/projects/smart-lock"
   },
   {
@@ -146,7 +138,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["Docker", "JSON-RPC", "Python", "Systems Design"],
     github: "https://github.com/nghn0/mcpserver",
-    color: "accent-pink",
     pageUrl: "/projects/mcp-server"
   },
   {
@@ -162,7 +153,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["LSTM", "Python", "Pandas", "NumPy", "Data Visualization"],
     github: "https://github.com/nghn0/SolarCycle-analysis_and_prediction",
-    color: "neon-purple",
     pageUrl: "/projects/solarcycle-analysis"
   },
   {
@@ -178,7 +168,6 @@ export const allProjects: Project[] = [
     ],
     tech: ["JavaScript", "API", "SQLite", "HTML/CSS"],
     github: "https://github.com/nghn0/Sky_View",
-    color: "neon-cyan",
     pageUrl: "/projects/sky-view"
   }
 ];

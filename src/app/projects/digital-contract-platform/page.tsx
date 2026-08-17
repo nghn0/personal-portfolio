@@ -17,20 +17,20 @@ export default function DigitalContractPlatformPage() {
   return (
     <main className="min-h-screen pt-32 pb-24 px-6 relative overflow-hidden bg-[#0a0a0f]">
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-neon-cyan/20 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-neon-purple/20 rounded-full blur-[120px]"></div>
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-white/5 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="mb-12">
-          <Link href="/projects" className="inline-flex items-center gap-2 text-neon-cyan hover:text-white transition-colors group">
+          <Link href="/projects" className="inline-flex items-center gap-2 text-[#b9c3d4] hover:text-white transition-colors group">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </Link>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="flex flex-wrap items-center gap-4 mb-6">
-            <span className="px-4 py-1.5 rounded-full glass border-neon-cyan/30 text-neon-cyan text-sm font-accent tracking-widest uppercase">
+            <span className="px-4 py-1.5 rounded-full glass border-white/10 text-[#b9c3d4] text-sm font-accent tracking-widest uppercase">
               Full-Stack + AI + Web3
             </span>
             <span className="px-4 py-1.5 rounded-full glass border-white/10 text-gray-300 text-sm font-accent tracking-widest uppercase">
@@ -39,7 +39,7 @@ export default function DigitalContractPlatformPage() {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold font-heading mb-6 tracking-tight">
-            Digital Contract <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple">Platform</span>
+            Digital Contract <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400">Platform</span>
           </h1>
           
           <p className="text-xl text-gray-400 font-body leading-relaxed mb-10">
@@ -47,10 +47,10 @@ export default function DigitalContractPlatformPage() {
           </p>
 
           <div className="flex flex-wrap gap-4 mb-16">
-            <a href="https://github.com/nghn0/digital-contract-platform" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/50 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+            <a href="https://github.com/nghn0/digital-contract-platform" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/20 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(185,195,212,0.15)]">
               <GithubIcon size={20} /> View Repository
             </a>
-            <a href="https://digital-contract-platform.vercel.app/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-neon-purple/10 hover:bg-neon-purple/20 border border-neon-purple/50 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(122,0,255,0.3)]">
+            <a href="https://digital-contract-platform.vercel.app/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/20 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(185,195,212,0.15)]">
               <GlobeIcon size={20} /> Live Application
             </a>
           </div>
@@ -61,7 +61,7 @@ export default function DigitalContractPlatformPage() {
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="glass-card p-8">
               <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2">
-                <Layers className="text-neon-cyan" size={20} /> Frontend Interface
+                <Layers className="text-[#b9c3d4]" size={20} /> Frontend Interface
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed mb-4">
                 Built with Next.js (16.1.6) and React (19.2.3) in TypeScript, featuring Tailwind CSS styling. Serves as the dashboard for contract management and viewing. Uses Ethers.js for Web3 wallet integration and cryptographically signing documents.
@@ -70,7 +70,7 @@ export default function DigitalContractPlatformPage() {
             
             <div className="glass-card p-8">
               <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2">
-                <Server className="text-accent-pink" size={20} /> Backend Orchestrator
+                <Server className="text-[#b9c3d4]" size={20} /> Backend Orchestrator
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed mb-4">
                 Express.js (5.2.1) Node API that manages Supabase database interactions, handles user JWT authentication, coordinates file storage securely, and interacts with both the AI Model and Blockchain layers.
@@ -79,7 +79,7 @@ export default function DigitalContractPlatformPage() {
 
             <div className="glass-card p-8">
               <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2">
-                <BrainCircuit className="text-neon-purple" size={20} /> AI Analysis Model
+                <BrainCircuit className="text-[#b9c3d4]" size={20} /> AI Analysis Model
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed mb-4">
                 Python gRPC microservice for processing legal documents using NLP. Uses pdfplumber, spacy, transformers, and ChromaDB for RAG-based analysis. Communicates with LLMs to extract risks and missing clauses.
@@ -99,7 +99,7 @@ export default function DigitalContractPlatformPage() {
           {/* Workflow & Communication */}
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="glass-card p-8 md:p-10">
             <h3 className="text-2xl font-bold font-heading text-white mb-6 flex items-center gap-2">
-              <Network className="text-neon-cyan" size={24} /> Communication & Workflow
+              <Network className="text-[#b9c3d4]" size={24} /> Communication & Workflow
             </h3>
             
             <div className="space-y-6">

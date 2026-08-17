@@ -13,19 +13,19 @@ export default function SentientNPCPage() {
   return (
     <main className="min-h-screen pt-32 pb-24 px-6 relative overflow-hidden bg-[#0a0a0f]">
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-neon-cyan/20 rounded-full blur-[120px]"></div>
+        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="mb-12">
-          <Link href="/projects" className="inline-flex items-center gap-2 text-neon-cyan hover:text-white transition-colors group">
+          <Link href="/projects" className="inline-flex items-center gap-2 text-[#b9c3d4] hover:text-white transition-colors group">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </Link>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="flex flex-wrap items-center gap-4 mb-6">
-            <span className="px-4 py-1.5 rounded-full glass border-neon-cyan/30 text-neon-cyan text-sm font-accent tracking-widest uppercase">
+            <span className="px-4 py-1.5 rounded-full glass border-white/10 text-[#b9c3d4] text-sm font-accent tracking-widest uppercase">
               AI + Systems
             </span>
             <span className="px-4 py-1.5 rounded-full glass border-white/10 text-gray-300 text-sm font-accent tracking-widest uppercase">
@@ -34,7 +34,7 @@ export default function SentientNPCPage() {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold font-heading mb-6 tracking-tight">
-            Sentient <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-white">NPC</span>
+            Sentient <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400">NPC</span>
           </h1>
           
           <p className="text-xl text-gray-400 font-body leading-relaxed mb-10">
@@ -42,7 +42,7 @@ export default function SentientNPCPage() {
           </p>
 
           <div className="flex flex-wrap gap-4 mb-16">
-            <a href="https://github.com/nghn0/Sentient-NPC" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/50 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+            <a href="https://github.com/nghn0/Sentient-NPC" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/20 transition-all text-white font-medium hover:shadow-[0_0_15px_rgba(185,195,212,0.15)]">
               <GithubIcon size={20} /> View Repository
             </a>
           </div>
@@ -51,21 +51,21 @@ export default function SentientNPCPage() {
         <div className="space-y-16">
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="glass-card p-8 md:p-10">
             <h2 className="text-2xl font-bold font-heading text-white mb-6 flex items-center gap-3">
-              <Zap className="text-neon-cyan" /> Architecture & Performance
+              <Zap className="text-[#b9c3d4]" /> Architecture & Performance
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-300">
               <div className="bg-white/5 p-6 rounded-xl border border-white/10">
-                <Mic className="text-neon-cyan mb-4" size={24} />
+                <Mic className="text-[#b9c3d4] mb-4" size={24} />
                 <h4 className="font-bold text-white mb-2">Offline Pipeline</h4>
                 <p className="text-sm text-gray-400">STT (Vosk) → Transformer NLP → TTS (Silero). Zero internet required.</p>
               </div>
               <div className="bg-white/5 p-6 rounded-xl border border-white/10">
-                <Cpu className="text-neon-cyan mb-4" size={24} />
+                <Cpu className="text-[#b9c3d4] mb-4" size={24} />
                 <h4 className="font-bold text-white mb-2">Custom Transformer</h4>
                 <p className="text-sm text-gray-400">~2.6M parameters trained on 7,565 Skyrim-style dialogues.</p>
               </div>
               <div className="bg-white/5 p-6 rounded-xl border border-white/10">
-                <Zap className="text-neon-cyan mb-4" size={24} />
+                <Zap className="text-[#b9c3d4] mb-4" size={24} />
                 <h4 className="font-bold text-white mb-2">Ultra-Low Latency</h4>
                 <p className="text-sm text-gray-400">Chatbot inference runs in ~245 ms. BERTScore-F1: 0.904.</p>
               </div>

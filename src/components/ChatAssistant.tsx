@@ -77,12 +77,12 @@ export default function ChatAssistant() {
         id="ai-chat-btn"
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full flex items-center justify-center glass border-neon-cyan/50 text-white shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all duration-300 hover:scale-110 group",
+          "fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full flex items-center justify-center glass border-white/20 text-white shadow-[0_0_20px_rgba(185,195,212,0.15)] transition-all duration-300 hover:scale-110 group",
           isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
         )}
       >
-        <MessageSquare size={24} className="group-hover:text-neon-cyan transition-colors" />
-        <span className="absolute w-full h-full rounded-full border border-neon-cyan/50 animate-ping opacity-20"></span>
+        <MessageSquare size={24} className="group-hover:text-white transition-colors" />
+        <span className="absolute w-full h-full rounded-full border border-white/20 animate-ping opacity-20"></span>
       </button>
 
       <AnimatePresence>
@@ -93,18 +93,18 @@ export default function ChatAssistant() {
             exit={{ opacity: 0, y: 20, scale: 0.8 }}
             transition={{ type: "spring", damping: 20, stiffness: 200 }}
             style={{ transformOrigin: "bottom right" }}
-            className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[400px] h-[500px] glass-card flex flex-col overflow-hidden border-neon-cyan/30 shadow-[0_10px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(0,240,255,0.1)]"
+            className="fixed bottom-6 right-6 z-50 w-[min(350px,calc(100vw-2rem))] sm:w-[400px] h-[500px] glass-card flex flex-col overflow-hidden border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-neon-cyan/20 flex items-center justify-center">
-                  <Cpu size={18} className="text-neon-cyan" />
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+                  <Cpu size={18} className="text-[#b9c3d4]" />
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-white text-sm">AI Assistant</h3>
-                  <p className="text-xs text-neon-cyan flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse"></span> Online
+                  <p className="text-xs text-[#b9c3d4] flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#b9c3d4] animate-pulse"></span> Online
                   </p>
                 </div>
               </div>
@@ -121,13 +121,13 @@ export default function ChatAssistant() {
               {messages.map((msg, i) => (
                 <div key={i} className={cn("flex gap-3", msg.role === "user" ? "justify-end" : "justify-start")}>
                   {msg.role === "assistant" && (
-                    <div className="w-6 h-6 rounded-full bg-neon-cyan/20 flex items-center justify-center flex-shrink-0 mt-1">
-                      <Cpu size={12} className="text-neon-cyan" />
+                    <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Cpu size={12} className="text-[#b9c3d4]" />
                     </div>
                   )}
                   <div className={cn(
                     "px-4 py-2 rounded-2xl max-w-[80%] text-sm whitespace-pre-wrap",
-                    msg.role === "user" ? "bg-white/10 text-white rounded-br-none" : "bg-neon-cyan/10 border border-neon-cyan/20 text-gray-200 rounded-bl-none"
+                    msg.role === "user" ? "bg-white/10 text-white rounded-br-none" : "bg-white/5 border border-white/10 text-gray-200 rounded-bl-none"
                   )}>
                     {msg.content}
                   </div>
@@ -141,13 +141,13 @@ export default function ChatAssistant() {
               
               {isLoading && (
                 <div className="flex gap-3 justify-start">
-                  <div className="w-6 h-6 rounded-full bg-neon-cyan/20 flex items-center justify-center flex-shrink-0 mt-1">
-                    <Cpu size={12} className="text-neon-cyan" />
+                  <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-1">
+                    <Cpu size={12} className="text-[#b9c3d4]" />
                   </div>
-                  <div className="px-4 py-3 rounded-2xl bg-neon-cyan/10 border border-neon-cyan/20 text-gray-200 rounded-bl-none flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 bg-neon-cyan rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></span>
-                    <span className="w-1.5 h-1.5 bg-neon-cyan rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></span>
-                    <span className="w-1.5 h-1.5 bg-neon-cyan rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></span>
+                  <div className="px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-gray-200 rounded-bl-none flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-[#b9c3d4] rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></span>
+                    <span className="w-1.5 h-1.5 bg-[#b9c3d4] rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></span>
+                    <span className="w-1.5 h-1.5 bg-[#b9c3d4] rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></span>
                   </div>
                 </div>
               )}
@@ -180,12 +180,12 @@ export default function ChatAssistant() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask me anything..."
-                  className="w-full bg-black/50 border border-white/10 rounded-full pl-4 pr-12 py-2.5 text-sm text-white focus:outline-none focus:border-neon-cyan/50 focus:ring-1 focus:ring-neon-cyan/50 transition-all placeholder:text-gray-500"
+                  className="w-full bg-black/50 border border-white/10 rounded-full pl-4 pr-12 py-2.5 text-sm text-white focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/40 transition-all placeholder:text-gray-500"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isLoading}
-                  className="absolute right-2 p-1.5 rounded-full text-neon-cyan hover:bg-neon-cyan/10 disabled:opacity-50 disabled:hover:bg-transparent transition-colors"
+                  className="absolute right-2 p-1.5 rounded-full text-[#b9c3d4] hover:bg-white/10 disabled:opacity-50 disabled:hover:bg-transparent transition-colors"
                 >
                   <Send size={16} />
                 </button>
