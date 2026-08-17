@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useProgress } from "@react-three/drei";
 
 const ACCENT = "#b9c3d4";
+
+// Orbit radius (px) — large enough that the jet never clips the status text.
+const ORBIT = 160;
 
 function JetSVG() {
   return (
@@ -41,9 +44,13 @@ function JetSVG() {
   );
 }
 
+type Phase = "entering" | "orbiting" | "exiting";
+
 export default function SpaceJetLoader() {
   const { active, progress } = useProgress();
   const [minElapsed, setMinElapsed] = useState(false);
+  const [phase, setPhase] = useState<Phase>("entering");
+  const [gone, setGone] = useState(false);
   const startedAt = useRef<number | null>(null);
 
   // Show for a minimum of 700ms so the loader never flashes on fast loads.
@@ -67,45 +74,76 @@ export default function SpaceJetLoader() {
     return () => clearTimeout(t);
   }, [active]);
 
-  const show = active || !minElapsed;
+  const done = !active && minElapsed;
+
+  // Loading finished → immediately shift to the exit flight (derived, no setState).
+  const effPhase: Phase = done ? "exiting" : phase;
+
+  const render = !gone;
+
+  let jetAnimate: Record<string, unknown>;
+  let jetTransition: Record<string, unknown>;
+
+  if (effPhase === "entering") {
+    // 1. Fly in from the left, arriving at the top of the orbit circle.
+    jetAnimate = { x: 0, y: -ORBIT };
+    jetTransition = { duration: 1.2, ease: "easeInOut" };
+  } else if (effPhase === "orbiting") {
+    // 2. Circle around the center status text until the load finishes.
+    jetAnimate = {
+      x: [0, ORBIT, 0, -ORBIT, 0],
+      y: [-ORBIT, 0, ORBIT, 0, -ORBIT],
+    };
+    jetTransition = {
+      x: { duration: 6, ease: "linear", repeat: Infinity },
+      y: { duration: 6, ease: "linear", repeat: Infinity },
+    };
+  } else {
+    // 3. Fly out to the right once loading is done.
+    jetAnimate = { x: "70vw", y: 0 };
+    jetTransition = { duration: 0.85, ease: "easeIn" };
+  }
 
   return (
-    <AnimatePresence>
-      {show && (
+    render && (
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: effPhase === "exiting" ? 0 : 1 }}
+        transition={{
+          opacity: { duration: 0.5, delay: effPhase === "exiting" ? 0.8 : 0 },
+        }}
+      >
+        {/* Jet — centered, transform-driven */}
         <motion.div
-          key="space-jet-loader"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.6, ease: "easeInOut" } }}
-          className="pointer-events-none absolute inset-0 z-[25] flex flex-col items-center justify-center overflow-hidden"
+          className="absolute left-1/2 top-1/2 -ml-10 -mt-10 z-10"
+          initial={{ x: "-50vw", y: 0 }}
+          animate={jetAnimate}
+          transition={jetTransition}
+          onAnimationComplete={() => {
+            if (effPhase === "entering") setPhase("orbiting");
+            else if (effPhase === "exiting") setGone(true);
+          }}
         >
-          <motion.div
-            className="relative"
-            animate={{ x: ["-60vw", "60vw"], y: [0, -16, 0] }}
-            transition={{
-              x: { duration: 5, ease: "linear", repeat: Infinity },
-              y: { duration: 2.4, ease: "easeInOut", repeat: Infinity },
-            }}
-          >
-            <JetSVG />
-          </motion.div>
-
-          <div className="absolute bottom-16 flex flex-col items-center gap-3">
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/70">
-              Initializing Projects
-            </span>
-            <div className="h-px w-56 overflow-hidden bg-white/15">
-              <div
-                className="h-px bg-[#b9c3d4] transition-[width] duration-300 ease-out"
-                style={{ width: `${Math.min(100, Math.round(progress))}%` }}
-              />
-            </div>
-            <span className="font-mono text-[10px] tracking-[0.25em] text-white/40">
-              {Math.round(progress)}%
-            </span>
-          </div>
+          <JetSVG />
         </motion.div>
-      )}
-    </AnimatePresence>
+
+        {/* Status text — the jet circles around this */}
+        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-3">
+          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/70">
+            Initializing Projects
+          </span>
+          <div className="h-px w-44 overflow-hidden bg-white/15">
+            <div
+              className="h-px bg-[#b9c3d4] transition-[width] duration-300 ease-out"
+              style={{ width: `${Math.min(100, Math.round(progress))}%` }}
+            />
+          </div>
+          <span className="font-mono text-[10px] tracking-[0.25em] text-white/40">
+            {Math.round(progress)}%
+          </span>
+        </div>
+      </motion.div>
+    )
   );
 }
