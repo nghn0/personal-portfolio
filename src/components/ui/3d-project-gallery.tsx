@@ -21,6 +21,7 @@ import { X, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { allProjects, Project } from "@/data/projects";
 import { LiquidMetalFrame } from "@/components/ui/liquid-metal-frame";
+import SpaceJetLoader from "@/components/ui/space-jet-loader";
 
 /* =========================
    Accent tokens — monochrome silver, matching the featured-projects
@@ -552,6 +553,8 @@ export default function ProjectGallery() {
             />
           </Suspense>
         </Canvas>
+
+        <SpaceJetLoader />
 
         <ProjectModal />
 
