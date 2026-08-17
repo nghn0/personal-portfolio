@@ -560,7 +560,7 @@ export default function ProjectGallery() {
 
         {/* HUD */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none">
-          <p className="text-sm font-semibold text-white/90 font-mono tracking-[0.2em] uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
+          <p className="text-[10px] sm:text-sm font-semibold text-white/90 font-mono tracking-[0.2em] uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
             Drag to look around • Scroll to zoom • Click a card for details
           </p>
         </div>

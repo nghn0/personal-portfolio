@@ -70,6 +70,81 @@ function JetSVG() {
 
 type Phase = "entering" | "orbiting" | "exiting";
 
+// Deterministic particle config for the splashing exhaust trail. Each particle
+// spurts out behind the ship (negative local x), grows dim and shrinks, then
+// pauses before the next burst.
+const EXHAUST_PARTICLES = [
+  { dist: 26, dur: 0.5, delay: 0, y: 0, mid: 0.5, gap: 0.35 },
+  { dist: 38, dur: 0.65, delay: 0.12, y: 2, mid: 0.4, gap: 0.45 },
+  { dist: 22, dur: 0.42, delay: 0.05, y: -2, mid: 0.6, gap: 0.3 },
+  { dist: 48, dur: 0.75, delay: 0.2, y: -4, mid: 0.35, gap: 0.55 },
+  { dist: 30, dur: 0.55, delay: 0.3, y: 4, mid: 0.45, gap: 0.4 },
+  { dist: 18, dur: 0.38, delay: 0.08, y: -1, mid: 0.65, gap: 0.28 },
+  { dist: 42, dur: 0.7, delay: 0.15, y: 1, mid: 0.38, gap: 0.5 },
+  { dist: 34, dur: 0.6, delay: 0.22, y: -3, mid: 0.42, gap: 0.48 },
+];
+
+// The engine flame behind the ship. Anchored to the jet container, so it stays
+// pointing backwards along the direction of travel while the ship circles.
+function JetExhaust() {
+  return (
+    <>
+      {/* Long faint streamer — gently pulsing */}
+      <motion.div
+        aria-hidden
+        className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[2px] w-44"
+        style={{
+          background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.28) 100%)`,
+        }}
+        animate={{ opacity: [0.3, 0.7, 0.4, 0.65, 0.3] }}
+        transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Flickering engine core */}
+      <motion.div
+        aria-hidden
+        className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[2px] w-24"
+        style={{
+          background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.95) 100%)`,
+        }}
+        animate={{ opacity: [0.9, 0.4, 0.95, 0.5, 0.9] }}
+        transition={{ duration: 0.65, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Soft glow */}
+      <motion.div
+        aria-hidden
+        className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[7px] w-16 blur-[3px]"
+        style={{
+          background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.55) 100%)`,
+        }}
+        animate={{ opacity: [0.55, 1, 0.7, 0.9, 0.55] }}
+        transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Splashing exhaust particles */}
+      {EXHAUST_PARTICLES.map((p, i) => (
+        <motion.div
+          key={i}
+          aria-hidden
+          className="absolute left-[14px] h-[2px] w-[2px] rounded-full"
+          style={{ top: `calc(50% - 1px + ${p.y}px)`, background: ACCENT }}
+          initial={{ x: 0, opacity: 0 }}
+          animate={{
+            x: [0, -p.dist],
+            opacity: [0.9, p.mid, 0],
+            scale: [1, 0.4],
+          }}
+          transition={{
+            duration: p.dur,
+            delay: p.delay,
+            repeat: Infinity,
+            repeatDelay: p.gap,
+            ease: "easeOut",
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
 export default function SpaceJetLoader() {
   const { active, progress } = useProgress();
   const [phase, setPhase] = useState<Phase>("entering");
@@ -117,10 +192,18 @@ export default function SpaceJetLoader() {
     // 2. Circle around the center status text until the load finishes.
     jetAnimate = orbitKeyframes;
     jetTransition = { duration: 8, ease: "linear", repeat: Infinity };
+  } else if (hardCap) {
+    // Failsafe: bail out in a straight line from wherever we are.
+    jetAnimate = { x: "76vw", y: "-20vh", rotate: 0 };
+    jetTransition = { duration: 0.8, ease: "easeInOut" };
   } else {
-    // 3. Fly out to the right once loading is done, straightening out as it leaves.
-    jetAnimate = { x: "70vw", y: 0, rotate: 0 };
-    jetTransition = { duration: 0.85, ease: "easeIn" };
+    // 3. Swoop up and out to the right in a smooth arc once loading is done.
+    jetAnimate = {
+      x: [0, "38vw", "76vw"],
+      y: [-ORBIT, "-58vh", "-34vh"],
+      rotate: [0, -20, -8],
+    };
+    jetTransition = { duration: 1.25, ease: "easeInOut" };
   }
 
   return (
@@ -130,70 +213,44 @@ export default function SpaceJetLoader() {
         initial={{ opacity: 0 }}
         animate={{ opacity: effPhase === "exiting" ? 0 : 1 }}
         transition={{
-          opacity: { duration: 0.5, delay: effPhase === "exiting" ? 0.8 : 0 },
+          opacity: { duration: 0.5, delay: effPhase === "exiting" ? 1.05 : 0 },
         }}
       >
-        {/* Jet — centered, transform-driven */}
-        <motion.div
-          className="absolute left-1/2 top-1/2 -ml-[70px] -mt-10 z-10"
-          initial={{ x: "-50vw", y: 0 }}
-          animate={jetAnimate}
-          transition={jetTransition}
-          onAnimationComplete={() => {
-            if (effPhase === "entering") setPhase("orbiting");
-            else if (effPhase === "exiting") setGone(true);
-          }}
-          onUpdate={(latest) => {
-            // The orbit rotate keyframes run 0 -> 360 per revolution. When the
-            // angle wraps back down below 60 we know one full circle just
-            // completed — that is the only moment we allow a pending exit.
-            const r = Number(latest.rotate ?? 0);
-            const prev = lastRotateRef.current;
-            lastRotateRef.current = r;
-            if (prev > 300 && r < 60 && pendingExitRef.current) {
-              setExitNow(true);
-            }
-          }}
-        >
-          {/* Speed trail — anchored to the ship, so it rotates with it and
-              always extends backwards along the direction of travel. */}
-          <div
-            aria-hidden
-            className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[2px] w-56"
-            style={{
-              background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.28) 100%)`,
+        {/* Responsive scale — the whole loader (jet + status text) sits smaller
+            and stays centered on mobile. */}
+        <div className="scale-[0.85] sm:scale-100">
+          {/* Jet — centered, transform-driven */}
+          <motion.div
+            className="absolute left-1/2 top-1/2 -ml-[70px] -mt-10 z-10"
+            initial={{ x: "-50vw", y: 0 }}
+            animate={jetAnimate}
+            transition={jetTransition}
+            onAnimationComplete={() => {
+              if (effPhase === "entering") setPhase("orbiting");
+              else if (effPhase === "exiting") setGone(true);
             }}
-          />
-          <div
-            aria-hidden
-            className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[2px] w-28"
-            style={{
-              background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.85) 100%)`,
+            onUpdate={(latest) => {
+              // The orbit rotate keyframes run 0 -> 360 per revolution. When the
+              // angle wraps back down below 60 we know one full circle just
+              // completed — that is the only moment we allow a pending exit.
+              const r = Number(latest.rotate ?? 0);
+              const prev = lastRotateRef.current;
+              lastRotateRef.current = r;
+              if (prev > 300 && r < 60 && pendingExitRef.current) {
+                setExitNow(true);
+              }
             }}
-          />
-          <div
-            aria-hidden
-            className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[6px] w-20 blur-[3px]"
-            style={{
-              background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.5) 100%)`,
-            }}
-          />
-          <div
-            aria-hidden
-            className="absolute top-1/2 left-[8px] -translate-y-1/2 h-2 w-2 rounded-full"
-            style={{
-              background: ACCENT,
-              boxShadow: `0 0 8px 2px rgba(185,195,212,0.6)`,
-            }}
-          />
-          <JetSVG />
-        </motion.div>
+          >
+            <JetExhaust />
+            <JetSVG />
+          </motion.div>
 
-        {/* Status text — the jet circles around this */}
-        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/70">
-            Initializing Projects
-          </span>
+          {/* Status text — the jet circles around this */}
+          <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/70">
+              Initializing Projects
+            </span>
+          </div>
         </div>
       </motion.div>
     )
