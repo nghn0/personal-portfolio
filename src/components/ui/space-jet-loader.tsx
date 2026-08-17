@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   type TargetAndTransition,
@@ -75,7 +75,13 @@ export default function SpaceJetLoader() {
   const [phase, setPhase] = useState<Phase>("entering");
   const [orbitMinElapsed, setOrbitMinElapsed] = useState(false);
   const [hardCap, setHardCap] = useState(false);
+  const [exitNow, setExitNow] = useState(false);
   const [gone, setGone] = useState(false);
+
+  // Whether the load is done and we are allowed to leave the orbit (we still
+  // wait for the current revolution to wrap around before actually exiting).
+  const pendingExitRef = useRef(false);
+  const lastRotateRef = useRef(0);
 
   // Guarantee a minimum orbit time so the circling motion is always visible
   // before the exit flight.
@@ -92,7 +98,12 @@ export default function SpaceJetLoader() {
   }, []);
 
   const loaded = !active && progress >= 100;
-  const done = (loaded && orbitMinElapsed) || hardCap;
+  const pendingExit = loaded && orbitMinElapsed;
+  useEffect(() => {
+    pendingExitRef.current = pendingExit;
+  }, [pendingExit]);
+
+  const done = exitNow || hardCap;
   const effPhase: Phase = done ? "exiting" : phase;
 
   let jetAnimate: TargetAndTransition;
@@ -124,7 +135,7 @@ export default function SpaceJetLoader() {
       >
         {/* Jet — centered, transform-driven */}
         <motion.div
-          className="absolute left-1/2 top-1/2 -ml-10 -mt-10 z-10"
+          className="absolute left-1/2 top-1/2 -ml-[70px] -mt-10 z-10"
           initial={{ x: "-50vw", y: 0 }}
           animate={jetAnimate}
           transition={jetTransition}
@@ -132,7 +143,49 @@ export default function SpaceJetLoader() {
             if (effPhase === "entering") setPhase("orbiting");
             else if (effPhase === "exiting") setGone(true);
           }}
+          onUpdate={(latest) => {
+            // The orbit rotate keyframes run 0 -> 360 per revolution. When the
+            // angle wraps back down below 60 we know one full circle just
+            // completed — that is the only moment we allow a pending exit.
+            const r = Number(latest.rotate ?? 0);
+            const prev = lastRotateRef.current;
+            lastRotateRef.current = r;
+            if (prev > 300 && r < 60 && pendingExitRef.current) {
+              setExitNow(true);
+            }
+          }}
         >
+          {/* Speed trail — anchored to the ship, so it rotates with it and
+              always extends backwards along the direction of travel. */}
+          <div
+            aria-hidden
+            className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[2px] w-56"
+            style={{
+              background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.28) 100%)`,
+            }}
+          />
+          <div
+            aria-hidden
+            className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[2px] w-28"
+            style={{
+              background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.85) 100%)`,
+            }}
+          />
+          <div
+            aria-hidden
+            className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[6px] w-20 blur-[3px]"
+            style={{
+              background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.5) 100%)`,
+            }}
+          />
+          <div
+            aria-hidden
+            className="absolute top-1/2 left-[8px] -translate-y-1/2 h-2 w-2 rounded-full"
+            style={{
+              background: ACCENT,
+              boxShadow: `0 0 8px 2px rgba(185,195,212,0.6)`,
+            }}
+          />
           <JetSVG />
         </motion.div>
 
