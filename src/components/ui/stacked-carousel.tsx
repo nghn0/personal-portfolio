@@ -40,6 +40,17 @@ type DeckSpec = {
   opacity: number;
 };
 
+// On small screens the fixed deck offsets leave flanking cards peeking wide
+// off the viewport edges — a bright metallic ring flashes there while a card
+// slides in. Tuck the fan further out so it stays hidden until it reaches center.
+function specFor(offset: number): DeckSpec {
+  const base = DECK[offset];
+  if (typeof window !== "undefined" && window.innerWidth < 768) {
+    return { ...base, x: base.x * 1.3 };
+  }
+  return base;
+}
+
 function offsetOf(slot: number, cursor: number, total: number): number {
   const half = Math.floor(total / 2);
   let offset = ((slot - cursor) % total + total) % total;
@@ -90,7 +101,7 @@ export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
       if (initialRunRef.current) {
         initialRunRef.current = false;
 
-        const finalDeck = els.map((_, i) => DECK[offsetOf(i, 0, total)]);
+        const finalDeck = els.map((_, i) => specFor(offsetOf(i, 0, total)));
         const controls = containerRef.current?.querySelector<HTMLElement>("[data-deal-fade]");
         const prefersReduced = window.matchMedia(
           "(prefers-reduced-motion: reduce)"
@@ -186,7 +197,7 @@ export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
       // Re-slice the deck whenever the cursor moves.
       els.forEach((el, i) => {
         if (!el) return;
-        const st = DECK[offsetOf(i, cursorRef.current, total)];
+        const st = specFor(offsetOf(i, cursorRef.current, total));
         gsap.to(el, {
           x: st.x,
           y: st.y,
@@ -332,7 +343,7 @@ let lastX = 0;
               style={{ zIndex: spec.z }}
             >
               <div
-                className={cn("w-[300px] sm:w-[380px] rounded-lg", isActive && "cursor-grab")}
+                className={cn("w-[260px] sm:w-[380px] rounded-lg", isActive && "cursor-grab")}
                 onClick={() => {
                   if (isActive && !suppressClickRef.current) onSelect?.(project);
                 }}
