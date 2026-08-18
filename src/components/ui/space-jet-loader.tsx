@@ -72,7 +72,10 @@ type Phase = "entering" | "orbiting" | "exiting";
 
 // Deterministic particle config for the splashing exhaust trail. Each particle
 // spurts out behind the ship (negative local x), grows dim and shrinks, then
-// pauses before the next burst.
+// pauses before the next burst. `curve` bends it along the orbit so the trail
+// arcs instead of flying straight while the jet goes around.
+const CURVE = (dist: number) => ORBIT - Math.sqrt(ORBIT * ORBIT - dist * dist);
+
 const EXHAUST_PARTICLES = [
   { dist: 26, dur: 0.5, delay: 0, y: 0, mid: 0.5, gap: 0.35 },
   { dist: 38, dur: 0.65, delay: 0.12, y: 2, mid: 0.4, gap: 0.45 },
@@ -85,50 +88,69 @@ const EXHAUST_PARTICLES = [
 ];
 
 // The engine flame behind the ship. Anchored to the jet container, so it stays
-// pointing backwards along the direction of travel while the ship circles.
+// pointing backwards along the direction of travel while the ship circles. The
+// trail is drawn as an arc that bends toward the orbit centre — following the
+// circular path the ship actually takes.
+const TRAIL_PATH = "M168 40 C 120 36 80 50 45 58 C 24 63 10 65 0 66";
+
 function JetExhaust() {
   return (
     <>
-      {/* Long faint streamer — gently pulsing */}
-      <motion.div
+      {/* Curved comet trail */}
+      <svg
+        viewBox="0 0 180 80"
+        className="pointer-events-none absolute left-[-156px] top-0 h-20 w-[180px]"
         aria-hidden
-        className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[2px] w-44"
-        style={{
-          background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.28) 100%)`,
-        }}
-        animate={{ opacity: [0.3, 0.7, 0.4, 0.65, 0.3] }}
-        transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
-      />
-      {/* Flickering engine core */}
-      <motion.div
-        aria-hidden
-        className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[2px] w-24"
-        style={{
-          background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.95) 100%)`,
-        }}
-        animate={{ opacity: [0.9, 0.4, 0.95, 0.5, 0.9] }}
-        transition={{ duration: 0.65, repeat: Infinity, ease: "easeInOut" }}
-      />
-      {/* Soft glow */}
-      <motion.div
-        aria-hidden
-        className="absolute top-1/2 left-[12px] -translate-x-full -translate-y-1/2 h-[7px] w-16 blur-[3px]"
-        style={{
-          background: `linear-gradient(90deg, rgba(185,195,212,0) 0%, rgba(185,195,212,0.55) 100%)`,
-        }}
-        animate={{ opacity: [0.55, 1, 0.7, 0.9, 0.55] }}
-        transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      {/* Splashing exhaust particles */}
+      >
+        <defs>
+          <linearGradient id="trailGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor={ACCENT} stopOpacity="0" />
+            <stop offset="100%" stopColor={ACCENT} stopOpacity="1" />
+          </linearGradient>
+        </defs>
+        {/* Soft glow */}
+        <motion.path
+          d={TRAIL_PATH}
+          fill="none"
+          stroke="url(#trailGrad)"
+          strokeWidth="8"
+          strokeLinecap="round"
+          style={{ filter: "blur(3px)" }}
+          animate={{ opacity: [0.14, 0.28, 0.18, 0.24, 0.14] }}
+          transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Flickering streamer */}
+        <motion.path
+          d={TRAIL_PATH}
+          fill="none"
+          stroke="url(#trailGrad)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          animate={{ opacity: [0.5, 0.85, 0.6, 0.75, 0.5] }}
+          transition={{ duration: 0.65, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Bright core */}
+        <path
+          d={TRAIL_PATH}
+          fill="none"
+          stroke={ACCENT}
+          strokeWidth="1"
+          strokeLinecap="round"
+          opacity="0.9"
+        />
+      </svg>
+
+      {/* Splashing exhaust particles — curve along the orbit like the trail */}
       {EXHAUST_PARTICLES.map((p, i) => (
         <motion.div
           key={i}
           aria-hidden
           className="absolute left-[14px] h-[2px] w-[2px] rounded-full"
-          style={{ top: `calc(50% - 1px + ${p.y}px)`, background: ACCENT }}
-          initial={{ x: 0, opacity: 0 }}
+          style={{ top: "calc(50% - 1px)", background: ACCENT }}
+          initial={{ x: 0, y: p.y, opacity: 0 }}
           animate={{
             x: [0, -p.dist],
+            y: [p.y, p.y + CURVE(p.dist)],
             opacity: [0.9, p.mid, 0],
             scale: [1, 0.4],
           }}
@@ -148,23 +170,18 @@ function JetExhaust() {
 export default function SpaceJetLoader() {
   const { active, progress } = useProgress();
   const [phase, setPhase] = useState<Phase>("entering");
-  const [orbitMinElapsed, setOrbitMinElapsed] = useState(false);
-  const [hardCap, setHardCap] = useState(false);
+  const [exitTarget, setExitTarget] = useState<{
+    x: number;
+    y: number;
+    rotate: number;
+  } | null>(null);
   const [exitNow, setExitNow] = useState(false);
+  const [hardCap, setHardCap] = useState(false);
   const [gone, setGone] = useState(false);
 
-  // Whether the load is done and we are allowed to leave the orbit (we still
-  // wait for the current revolution to wrap around before actually exiting).
-  const pendingExitRef = useRef(false);
-  const lastRotateRef = useRef(0);
-
-  // Guarantee a minimum orbit time so the circling motion is always visible
-  // before the exit flight.
-  useEffect(() => {
-    if (phase !== "orbiting") return;
-    const t = setTimeout(() => setOrbitMinElapsed(true), 2500);
-    return () => clearTimeout(t);
-  }, [phase]);
+  // Latest interpolated jet position/heading, captured every animation frame
+  // so the exit flight can launch from wherever the jet currently is.
+  const latestRef = useRef({ x: 0, y: -ORBIT, rotate: 0 });
 
   // Safety net: never trap the visitor on the loader if an asset hangs.
   useEffect(() => {
@@ -173,10 +190,21 @@ export default function SpaceJetLoader() {
   }, []);
 
   const loaded = !active && progress >= 100;
-  const pendingExit = loaded && orbitMinElapsed;
+
+  // The moment assets are ready, leave the orbit immediately from wherever the
+  // jet is pointing — no need to finish the revolution.
   useEffect(() => {
-    pendingExitRef.current = pendingExit;
-  }, [pendingExit]);
+    if (!loaded || exitNow || gone) return;
+    const cur = latestRef.current;
+    const rad = ((cur.rotate ?? 0) * Math.PI) / 180;
+    const D = 2000;
+    setExitTarget({
+      x: cur.x + Math.cos(rad) * D,
+      y: cur.y + Math.sin(rad) * D,
+      rotate: cur.rotate ?? 0,
+    });
+    setExitNow(true);
+  }, [loaded, exitNow, gone]);
 
   const done = exitNow || hardCap;
   const effPhase: Phase = done ? "exiting" : phase;
@@ -196,14 +224,18 @@ export default function SpaceJetLoader() {
     // Failsafe: bail out in a straight line from wherever we are.
     jetAnimate = { x: "76vw", y: "-20vh", rotate: 0 };
     jetTransition = { duration: 0.8, ease: "easeInOut" };
-  } else {
-    // 3. Swoop up and out to the right in a smooth arc once loading is done.
+  } else if (exitTarget) {
+    // 3. Shoot off in the direction the jet was pointing when the load finished.
     jetAnimate = {
-      x: [0, "38vw", "76vw"],
-      y: [-ORBIT, "-58vh", "-34vh"],
-      rotate: [0, -20, -8],
+      x: exitTarget.x,
+      y: exitTarget.y,
+      rotate: exitTarget.rotate,
     };
-    jetTransition = { duration: 1.25, ease: "easeInOut" };
+    jetTransition = { duration: 0.7, ease: "easeInOut" };
+  } else {
+    // Unreachable, but keeps the branches exhaustive.
+    jetAnimate = { x: 0, y: -ORBIT };
+    jetTransition = { duration: 1.2, ease: "easeInOut" };
   }
 
   return (
@@ -213,7 +245,7 @@ export default function SpaceJetLoader() {
         initial={{ opacity: 0 }}
         animate={{ opacity: effPhase === "exiting" ? 0 : 1 }}
         transition={{
-          opacity: { duration: 0.5, delay: effPhase === "exiting" ? 1.05 : 0 },
+          opacity: { duration: 0.5, delay: effPhase === "exiting" ? 0.75 : 0 },
         }}
       >
         {/* Responsive scale — the whole loader (jet + status text) sits smaller
@@ -230,15 +262,11 @@ export default function SpaceJetLoader() {
               else if (effPhase === "exiting") setGone(true);
             }}
             onUpdate={(latest) => {
-              // The orbit rotate keyframes run 0 -> 360 per revolution. When the
-              // angle wraps back down below 60 we know one full circle just
-              // completed — that is the only moment we allow a pending exit.
-              const r = Number(latest.rotate ?? 0);
-              const prev = lastRotateRef.current;
-              lastRotateRef.current = r;
-              if (prev > 300 && r < 60 && pendingExitRef.current) {
-                setExitNow(true);
-              }
+              latestRef.current = {
+                x: Number(latest.x ?? 0),
+                y: Number(latest.y ?? 0),
+                rotate: Number(latest.rotate ?? 0),
+              };
             }}
           >
             <JetExhaust />

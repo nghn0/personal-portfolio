@@ -61,7 +61,7 @@ type StackedCarouselProps = {
 export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
   const total = projects.length;
   const [cursor, setCursor] = useState(0);
-  const [deckSettled, setDeckSettled] = useState(true);
+  const [frameCard, setFrameCard] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -185,7 +185,6 @@ export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
       dealScrollRef.current = null;
 
       // Re-slice the deck whenever the cursor moves.
-      setDeckSettled(false);
       els.forEach((el, i) => {
         if (!el) return;
         const st = DECK[offsetOf(i, cursorRef.current, total)];
@@ -200,9 +199,10 @@ export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
           overwrite: "auto",
         });
       });
-      // The card reaches center quickly (EASE_SETTLE overshoots by ~40% of the
-      // slide) — reveal the metallic frame as soon as it's close, not at the end.
-      gsap.delayedCall(0.3, () => setDeckSettled(true));
+      // The frame stays on the card that was just flung so its border doesn't
+      // blink out mid-slide; once the incoming card is near center (EASE_SETTLE
+      // overshoots early), hand the frame over to it.
+      gsap.delayedCall(0.3, () => setFrameCard(activeIndex));
 
       const controlsAfter = containerRef.current?.querySelector<HTMLElement>(
         "[data-deal-fade]"
@@ -342,7 +342,7 @@ let lastX = 0;
                   if (isActive && !suppressClickRef.current) onSelect?.(project);
                 }}
               >
-                <ProjectCard project={project} active={isActive} dimLevel={Math.min(2, Math.abs(offset))} frameOn={deckSettled} />
+                <ProjectCard project={project} active={isActive} dimLevel={Math.min(2, Math.abs(offset))} showFrame={frameCard === i} />
               </div>
             </div>
           );
@@ -379,26 +379,16 @@ function ProjectCard({
   project,
   active,
   dimLevel,
-  frameOn,
+  showFrame,
 }: {
   project: Project;
   active: boolean;
   dimLevel: number;
-  frameOn: boolean;
+  showFrame: boolean;
 }) {
   return (
     <div className={cn("group relative", active && "rounded-[13.5px] p-[1.5px]")}>
-      {active && (
-        <LiquidMetalFrame
-          radius={13.5}
-          thickness={1.5}
-          speed={0.5}
-          className={cn(
-            "transition-opacity duration-200",
-            frameOn ? "opacity-100" : "opacity-0"
-          )}
-        />
-      )}
+      {showFrame && <LiquidMetalFrame radius={13.5} thickness={1.5} speed={0.5} />}
       <div
         className={cn(
           "relative flex min-h-[430px] flex-col overflow-hidden rounded-xl bg-[#0d0d12] p-8 text-left font-mono transition-shadow duration-300",
