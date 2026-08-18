@@ -392,7 +392,7 @@ function ProjectCard({
           thickness={1.5}
           speed={0.5}
           className={cn(
-            "transition-opacity duration-500",
+            "transition-opacity duration-200",
             frameOn ? "opacity-100" : "opacity-0"
           )}
         />
