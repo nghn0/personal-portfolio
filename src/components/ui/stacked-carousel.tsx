@@ -198,9 +198,11 @@ export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
           duration: 1.2,
           ease: EASE_SETTLE,
           overwrite: "auto",
-          onComplete: i === els.length - 1 ? () => setDeckSettled(true) : undefined,
         });
       });
+      // The card reaches center quickly (EASE_SETTLE overshoots by ~40% of the
+      // slide) — reveal the metallic frame as soon as it's close, not at the end.
+      gsap.delayedCall(0.3, () => setDeckSettled(true));
 
       const controlsAfter = containerRef.current?.querySelector<HTMLElement>(
         "[data-deal-fade]"
