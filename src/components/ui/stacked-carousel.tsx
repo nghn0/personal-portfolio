@@ -40,17 +40,6 @@ type DeckSpec = {
   opacity: number;
 };
 
-// On small screens the fixed deck offsets leave flanking cards peeking wide
-// off the viewport edges — a bright metallic ring flashes there while a card
-// slides in. Tuck the fan further out so it stays hidden until it reaches center.
-function specFor(offset: number): DeckSpec {
-  const base = DECK[offset];
-  if (typeof window !== "undefined" && window.innerWidth < 768) {
-    return { ...base, x: base.x * 1.3 };
-  }
-  return base;
-}
-
 function offsetOf(slot: number, cursor: number, total: number): number {
   const half = Math.floor(total / 2);
   let offset = ((slot - cursor) % total + total) % total;
@@ -72,6 +61,7 @@ type StackedCarouselProps = {
 export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
   const total = projects.length;
   const [cursor, setCursor] = useState(0);
+  const [deckSettled, setDeckSettled] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -101,7 +91,7 @@ export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
       if (initialRunRef.current) {
         initialRunRef.current = false;
 
-        const finalDeck = els.map((_, i) => specFor(offsetOf(i, 0, total)));
+        const finalDeck = els.map((_, i) => DECK[offsetOf(i, 0, total)]);
         const controls = containerRef.current?.querySelector<HTMLElement>("[data-deal-fade]");
         const prefersReduced = window.matchMedia(
           "(prefers-reduced-motion: reduce)"
@@ -195,9 +185,10 @@ export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
       dealScrollRef.current = null;
 
       // Re-slice the deck whenever the cursor moves.
+      setDeckSettled(false);
       els.forEach((el, i) => {
         if (!el) return;
-        const st = specFor(offsetOf(i, cursorRef.current, total));
+        const st = DECK[offsetOf(i, cursorRef.current, total)];
         gsap.to(el, {
           x: st.x,
           y: st.y,
@@ -207,6 +198,7 @@ export function StackedCarousel({ projects, onSelect }: StackedCarouselProps) {
           duration: 1.2,
           ease: EASE_SETTLE,
           overwrite: "auto",
+          onComplete: i === els.length - 1 ? () => setDeckSettled(true) : undefined,
         });
       });
 
@@ -348,7 +340,7 @@ let lastX = 0;
                   if (isActive && !suppressClickRef.current) onSelect?.(project);
                 }}
               >
-                <ProjectCard project={project} active={isActive} dimLevel={Math.min(2, Math.abs(offset))} />
+                <ProjectCard project={project} active={isActive} dimLevel={Math.min(2, Math.abs(offset))} frameOn={deckSettled} />
               </div>
             </div>
           );
@@ -385,14 +377,26 @@ function ProjectCard({
   project,
   active,
   dimLevel,
+  frameOn,
 }: {
   project: Project;
   active: boolean;
   dimLevel: number;
+  frameOn: boolean;
 }) {
   return (
     <div className={cn("group relative", active && "rounded-[13.5px] p-[1.5px]")}>
-      {active && <LiquidMetalFrame radius={13.5} thickness={1.5} speed={0.5} />}
+      {active && (
+        <LiquidMetalFrame
+          radius={13.5}
+          thickness={1.5}
+          speed={0.5}
+          className={cn(
+            "transition-opacity duration-500",
+            frameOn ? "opacity-100" : "opacity-0"
+          )}
+        />
+      )}
       <div
         className={cn(
           "relative flex min-h-[430px] flex-col overflow-hidden rounded-xl bg-[#0d0d12] p-8 text-left font-mono transition-shadow duration-300",
