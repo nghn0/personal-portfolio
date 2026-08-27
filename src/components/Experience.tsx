@@ -175,10 +175,10 @@ export default function Experience() {
               }}
               className={
                 index === 0
-                  ? "relative md:absolute md:top-0 md:left-0 mb-10 md:mb-0"
+                  ? "relative md:absolute md:top-0 md:left-[2%] mb-10 md:mb-0"
                   : index === 1
-                  ? "relative md:absolute md:top-0 md:left-[140px]"
-                  : "relative md:absolute md:top-0 md:left-[280px]"
+                  ? "relative md:absolute md:top-[80px] md:right-[2%]"
+                  : "relative md:absolute md:top-[180px] md:left-[2%]"
               }
             >
               <div
