@@ -178,7 +178,7 @@ export default function Experience() {
                   ? "relative md:absolute md:top-0 md:left-[2%] mb-10 md:mb-0"
                   : index === 1
                   ? "relative md:absolute md:top-[80px] md:right-[2%]"
-                  : "relative md:absolute md:top-[260px] md:right-[2%]"
+                  : "relative md:absolute md:top-[260px] md:left-[2%]"
               }
             >
               <div
