@@ -29,7 +29,8 @@ export const allProjects: Project[] = [
     ],
     tech: ["FastAPI", "React", "Vite", "Docker", "Ollama", "Python", "TypeScript", "REST API"],
     github: "https://github.com/nghn0/redcon",
-    liveUrl: undefined
+    liveUrl: undefined,
+    pageUrl: "/projects/redcon"
   },
   {
     id: "digital-contract-platform",
