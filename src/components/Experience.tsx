@@ -11,19 +11,6 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const experiences = [
   {
-    id: 1,
-    role: "Software Development Engineer",
-    company: "Neutrinos, Singapore",
-    duration: "Present",
-    description: [
-      "Building SQAT (Software Quality Assurance Testing) - an AI-assisted end-to-end QA automation platform",
-      "Contributing to framework design and development using Next.js 16, FastAPI, PostgreSQL, and Playwright",
-      "Writing and automating test cases, implementing human-in-the-loop approval gates for test execution",
-      "Integrating AI agents for scenario generation, script creation, and result classification",
-      "Working on Jira integration and X-Ray CSV export for defect tracking and reporting"
-    ]
-  },
-  {
     id: 4,
     role: "Software Development Engineer Intern",
     company: "Neutrinos, Singapore",
@@ -189,7 +176,9 @@ export default function Experience() {
               className={
                 index === 0
                   ? "relative md:absolute md:top-0 md:left-[2%] mb-10 md:mb-0"
-                  : "relative md:absolute md:top-[100px] md:right-[2%]"
+                  : index === 1
+                  ? "relative md:absolute md:top-[80px] md:right-[2%]"
+                  : "relative md:absolute md:top-[180px] md:left-[2%]"
               }
             >
               <div
