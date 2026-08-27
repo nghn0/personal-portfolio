@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-dark-bg: #0a0a0f;
+
+  --font-heading: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-accent: var(--font-orbitron), sans-serif;
+
+  --animate-pulse-slow: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)];
+  }
+  .glass-card {
+    @apply bg-[#13131a]/60 backdrop-blur-xl border border-white/5 rounded-2xl transition-all duration-300;
+  }
+  .glass-card:hover {
+    @apply border-white/20 shadow-[0_0_20px_rgba(185,195,212,0.15)] -translate-y-1;
+  }
+  .text-glow-cyan {
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.5);
+  }
+  .text-glow-purple {
+    text-shadow: 0 0 10px rgba(122, 0, 255, 0.7), 0 0 20px rgba(122, 0, 255, 0.5);
+  }
+  .heading {
+    @apply font-heading font-bold tracking-tight text-white;
+  }
+  .dither-pattern {
+    background-image: radial-gradient(
+      rgba(255, 255, 255, 0.5) 1px,
+      transparent 1px
+    );
+    background-size: 4px 4px;
+  }
+}
+
+:root {
+  --background: #0a0a0f;
+  --foreground: #ededed;
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.star-border-btn {
+  position: relative;
+  isolation: isolate;
+}
+
+.star-border-btn::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--ring-thickness, 2px));
+  z-index: -2;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg,
+    rgba(255, 255, 255, 0.9) 70deg,
+    transparent 140deg
+  );
+  animation: border-spin var(--ring-duration, 4s) linear infinite;
+}
+
+.star-border-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: #0a0a0f;
+  -webkit-mask-image: radial-gradient(
+    125% 125% at 50% 50%,
+    #000 0%,
+    #000 72%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    125% 125% at 50% 50%,
+    #000 0%,
+    #000 72%,
+    transparent 100%
+  );
+}
+
+@keyframes border-spin {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
