@@ -32,23 +32,6 @@ export const allProjects: Project[] = [
     liveUrl: "https://redcon.vercel.app"
   },
   {
-    id: "neutrinos-internship",
-    title: "Neutrinos - Software Development Engineer Intern",
-    type: "Full-Stack + AI",
-    shortDesc: "Software Development Engineer Intern at Neutrinos, Singapore",
-    description: "Built SQAT (Software Quality Assurance Testing) - an AI-assisted end-to-end QA automation platform. Automated test case generation and execution across the full product lifecycle, measured by end-to-end SQAT framework coverage, by architecting a Software Quality Assurance Testing pipeline from requirements intake to execution. Cut manual test case creation effort by ~70%, measured by requirement-to-script conversion time, by designing 7 AI agents that auto-generate Playwright test scripts from requirements documents and recorded workflows. Improved test reliability and QA team velocity, measured by faster review-to-approval cycles, by implementing human-in-the-loop approval gates within automated QA workflows.",
-    features: [
-      "AI-assisted end-to-end QA automation platform",
-      "7 AI agents auto-generating Playwright test scripts from requirements",
-      "Human-in-the-loop approval gates for test execution",
-      "70% reduction in manual test case creation effort",
-      "End-to-end QA pipeline from requirements to Jira defects"
-    ],
-    tech: ["Next.js 16", "TypeScript", "Tailwind CSS 4", "FastAPI", "PostgreSQL", "RabbitMQ", "Qdrant", "Anthropic Claude", "Playwright", "Jira"],
-    github: "https://github.com/kautilyadevaraj/Software-QA-Testing-Framework",
-    liveUrl: "/projects/sqat-framework"
-  },
-  {
     id: "digital-contract-platform",
     title: "Digital Contract Platform",
     type: "Full-Stack + AI + Web3",
