@@ -68,47 +68,63 @@ export default function Experience() {
     () => {
       const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
       const path = pathRef.current;
+
       if (!cards.length) return;
 
-      const pathLength = path?.getTotalLength() ?? 500;
-      if (path) {
-        gsap.set(path, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
+      const prefersReduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      if (prefersReduced) {
+        cards.forEach((el) => {
+          if (!el) return;
+          gsap.set(el, { x: 0, y: 0, opacity: 1 });
+        });
+        return;
       }
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 70%",
-          end: "top -30%",
-          scrub: 1.2,
+          start: "top 80%",
+          end: "bottom 20%",
+          scrub: 1,
         },
       });
 
-      // Card 1 slides in from the left, rotating into place
-      tl.fromTo(
-        cards[0],
-        { x: -110, opacity: 0, scale: 0.92 },
-        { x: 0, opacity: 1, scale: 1, duration: 1, ease: "power2.out" }
-      );
+      // Set initial positions - cards spread out horizontally
+      cards.forEach((el, i) => {
+        if (!el) return;
+        // Position cards: center one, others slightly offset
+        const offset = i - 1; // -1, 0, 1 for 3 cards
+        const baseX = offset * 140;
+        const baseY = 0;
+        gsap.set(el, {
+          x: baseX,
+          y: baseY,
+          scale: 1,
+          opacity: 1,
+        });
+      });
 
-      // Connector line draws between the cards
+      // Animate connector line
       if (path) {
-        tl.to(
-          path,
-          { strokeDashoffset: 0, duration: 1, ease: "power2.inOut" },
-          "-=0.5"
-        );
+        const totalLength = path.getTotalLength();
+        gsap.set(path, { strokeDasharray: totalLength, strokeDashoffset: totalLength });
+        tl.to(path, { strokeDashoffset: 0, duration: 1.5, ease: "power2.inOut" });
       }
 
-      // Card 2 slides in from the right, rotating into place
-      if (cards[1]) {
-        tl.fromTo(
-          cards[1],
-          { x: 110, opacity: 0, scale: 0.92 },
-          { x: 0, opacity: 1, scale: 1, duration: 1, ease: "power2.out" },
-          "-=0.7"
-        );
-      }
+      // Animate cards sliding into centered position
+      cards.forEach((el, i) => {
+        if (!el) return;
+        const targetX = (i - 1) * 140;
+        tl.to(el, {
+          x: targetX,
+          duration: 1,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      });
 
       return () => {
         ScrollTrigger.getAll().forEach((st) => st.kill());
@@ -135,8 +151,8 @@ export default function Experience() {
       <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r" />
       <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l" />
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        {/* Header — same animation as Featured Projects */}
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Header */}
         <BlurReveal className="mb-20">
           <h2
             className="font-mono text-3xl font-bold tracking-wider text-white md:text-5xl"
@@ -147,17 +163,16 @@ export default function Experience() {
           <div className="mt-3 h-1 w-28 bg-white rounded-full"></div>
         </BlurReveal>
 
-        {/* Pinned cards stage */}
-        <div className="relative w-full max-w-[1000px] mx-auto h-auto md:h-[820px]">
-          {/* Connector SVG */}
+        {/* Process flow cards */}
+        <div className="relative w-full mx-auto max-w-[1200px]">
+          {/* Connector line */}
           <svg
-            className="absolute top-0 left-0 w-full h-full pointer-events-none hidden md:block z-0"
-            viewBox="0 0 1000 820"
-            preserveAspectRatio="none"
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-2 pointer-events-none z-0"
+            viewBox="0 0 1000 2"
           >
             <path
               ref={pathRef}
-              d="M 190 150 C 400 150, 450 380, 790 380"
+              d="M 0 1 C 250 1, 500 1, 750 1, 1000 1"
               stroke="rgba(185, 195, 212, 0.5)"
               strokeWidth="2"
               strokeDasharray="8 6"
@@ -167,59 +182,73 @@ export default function Experience() {
             />
           </svg>
 
-          {experiences.map((exp, index) => (
-            <div
-              key={exp.id}
-              ref={(el) => {
-                cardRefs.current[index] = el;
-              }}
-              className={
-                index === 0
-                  ? "relative md:absolute md:top-0 md:left-[2%] mb-10 md:mb-0"
-                  : index === 1
-                  ? "relative md:absolute md:top-[80px] md:right-[2%]"
-                  : "relative md:absolute md:top-[300px] md:left-[2%]"
-              }
-            >
-              <div
-                className={`group relative w-full md:w-[340px] transition-transform duration-300 hover:scale-105 hover:z-30 ${
-                  index === 0 ? "rotate-1 md:rotate-6" : "rotate-[-1deg] md:-rotate-3"
-                }`}
-              >
-                <div className="bg-[#0d0d12] p-2] p-2 rounded-[25px] shadow-[0_10px_30px_rgba(0,0,0,0.6)] border border-white/10">
-                  <Pin className="w-8 h-8 text-[#b9c3d4] z-20 mb-5 mx-auto" />
-                  <div className="bg-[#101014] border border-white/10 rounded-[15px] p-5 flex flex-col relative overflow-hidden font-mono">
-                    {/* Hairline accent */}
-                    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+          {/* Cards container */}
+          <div className="relative pt-24 pb-24 flex justify-center gap-8">
+            {experiences.map((exp, index) => {
+              const isCenter = index === 1; // Middle card is centered
+              const offset = index - 1; // -1, 0, 1
+              const cardX = offset * 140;
+              const cardY = 0;
 
-                    <h3 className="text-xl font-bold text-white leading-tight mb-3">
-                      {exp.role}
-                    </h3>
+              return (
+                <div
+                  key={exp.id}
+                  ref={(el) => {
+                    cardRefs.current[index] = el;
+                  }}
+                  className="relative flex flex-col items-center min-w-[280px] transition-all duration-500 ease-out hover:scale-[105] hover:shadow-2xl"
+                  style={{
+                    transform: "translateX(" + cardX + "px) translateY(" + cardY + "px)",
+                  }}
+                >
+                  <div
+                    className={
+                      "relative w-full md:w-[340px] bg-[#0d0d12] p-6 rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.6)] transition-transform duration-300 " +
+                        (isCenter
+                          ? "group-hover:scale-105 group-z-30 rotate-0"
+                          : "rotate-[-1deg] md:-rotate-3")
+                    }
+                  >
+                    {/* Pin icon */}
+                    <Pin className="w-7 h-7 text-[#b9c3d4] mx-0 mb-4 pt-1" />
 
-                    <div className="flex flex-col gap-2 mb-5 text-sm font-medium text-neutral-400">
-                      <span className="flex items-center gap-2">
-                        <Briefcase size={14} className="text-[#b9c3d4]" />{" "}
-                        {exp.company}
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <Calendar size={14} className="text-[#b9c3d4]" />{" "}
-                        {exp.duration}
-                      </span>
+                    <div className="bg-[#101014] border border-white/10 rounded-xl p-5 flex flex-col relative overflow-hidden font-mono">
+                      {/* Hairline accent */}
+                      <div
+                        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                      />
+
+                      <h3 className="text-xl font-bold text-white leading-tight mb-3">
+                        {exp.role}
+                      </h3>
+
+                      <div className="flex flex-col gap-2 mb-5 text-sm font-medium text-neutral-400">
+                        <span className="flex items-center gap-2">
+                          <Briefcase size={14} className="text-[#b9c3d4]" />
+                          {" "}
+                          {exp.company}
+                        </span>
+                        <span className="flex items-center gap-2">
+                          <Calendar size={14} className="text-[#b9c3d4]" />
+                          {" "}
+                          {exp.duration}
+                        </span>
+                      </div>
+
+                      <ul className="space-y-3 text-neutral-400 text-sm leading-relaxed list-none">
+                        {exp.description.map((desc, i) => (
+                          <li key={i} className="flex items-start gap-2.5">
+                            <span className="text-[#b9c3d4] mt-0.5 flex-shrink-0">▹</span>
+                            <span>{desc}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-
-                    <ul className="space-y-2.5 text-neutral-400 text-sm leading-relaxed list-none">
-                      {exp.description.map((desc, i) => (
-                        <li key={i} className="flex items-start gap-2.5">
-                          <span className="text-[#b9c3d4] mt-0.5 flex-shrink-0">▹</span>
-                          <span>{desc}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
